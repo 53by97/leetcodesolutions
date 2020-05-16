@@ -6,17 +6,25 @@ class MaxSubarraySumCircular {
         System.out.println(new MaxSubarraySumCircular().maxSubarraySumCircular(new int[]{3, 5, -3, -1, 2, 4, -1}));
     }
 
-    public int maxSubarraySumCircular(int[] input) {
-        int max = -30000, min = 30000, total = 0, cMax = 0, cMin = 0;
+    public int maxSubarraySumCircular(int[] inputs) {
+        int maxSum = Integer.MIN_VALUE;
+        int minSum = Integer.MAX_VALUE;
+        int cumulativeMaxSum = 0;
+        int cumulativeMinSum = 0;
+        int total = 0;
 
-        for (int curr : input) {
-            cMax = Math.max(cMax + curr, curr);
-            max = Math.max(cMax, max);
-            cMin = Math.min(cMin + curr, curr);
-            min = Math.min(cMin, min);
-            total += curr;
+        for (int input : inputs) {
+            cumulativeMaxSum = Math.max(cumulativeMaxSum + input, input);
+            if (cumulativeMaxSum > maxSum) {
+                maxSum = cumulativeMaxSum;
+            }
+            cumulativeMinSum = Math.min(cumulativeMinSum + input, input);
+            if (cumulativeMinSum < minSum) {
+                minSum = cumulativeMinSum;
+            }
+            total += input;
         }
 
-        return max > 0 ? Math.max(max, total - min) : max;
+        return maxSum > 0 ? Math.max(maxSum, total - minSum) : maxSum;
     }
 }
