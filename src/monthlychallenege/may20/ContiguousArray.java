@@ -9,54 +9,23 @@ class ContiguousArray {
     }
 
     public int findMaxLength(int[] nums) {
-        int len = nums.length;
-
-        if (len < 2) {
-            return 0;
-        } else if (len == 2) {
-            return nums[0] != nums[1] ? 2 : 0;
-        }
-
-        int[] sums = new int[len];
-
-        sums[0] = nums[0] == 0 ? -1 : 1;
-
-        int min = sums[0];
-        int max = sums[0];
-
-        for (int i = 1; i < len; i++) {
-            sums[i] = sums[i - 1] + (nums[i] == 0 ? -1 : 1);
-            if (sums[i] > max) {
-                max = sums[i];
-            } else if (sums[i] < min) {
-                min = sums[i];
+        if (nums.length < 2) return 0;
+        int maxLength = 0;
+        int[] arr = new int[2 * nums.length + 1];
+        Arrays.fill(arr, -2);
+        arr[nums.length] = -1;
+        int counter = nums.length;
+        Arrays.stream(nums).mapToObj(o -> String.format("%2d ", o)).forEach(System.out::print);
+        for (int i = 0; i < nums.length; i++) {
+            Arrays.stream(arr).mapToObj(o -> String.format("%2d ", o)).forEach(System.out::print);
+            counter += nums[i] * 2 - 1;
+            if (arr[counter] == -2) {
+                arr[counter] = i;
+            } else {
+                maxLength = Math.max(maxLength, i - arr[counter]);
             }
         }
-
-        if (sums[len - 1] == 0) {
-            return len;
-        }
-
-        int last0Idx = -1;
-        int maxNon0Len = 0;
-
-        int[] firstCounts = new int[max - min + 1];
-
-        Arrays.fill(firstCounts, -1);
-
-        for (int i = 0; i < len; i++) {
-            if (sums[i] == 0) {
-                last0Idx = i;
-            }
-            int idx = sums[i] - min;
-            if (firstCounts[idx] == -1) {
-                firstCounts[idx] = i;
-            } else if (i - firstCounts[idx] > maxNon0Len) {
-                maxNon0Len = i - firstCounts[idx];
-            }
-        }
-
-        return Math.max(last0Idx + 1, maxNon0Len);
+        return maxLength;
     }
 
 }
