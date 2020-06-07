@@ -1,7 +1,8 @@
 package monthlychallenege.jun20;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
+import java.util.List;
 import java.util.stream.Stream;
 
 class ReconstructQueueOnHeight {
@@ -12,32 +13,17 @@ class ReconstructQueueOnHeight {
     }
 
     public int[][] reconstructQueue(int[][] people) {
-        if (people.length > 0) {
-            Arrays.sort(people, (a1, a2) -> {
-                if (a1[0] == a2[0] && a1[1] == a2[1]) {
-                    return 0;
-                } else if (a1[0] != a2[0]) {
-                    return Integer.compare(a2[0], a1[0]);
-                } else {
-                    return Integer.compare(a1[1], a2[1]);
-                }
-            });
+        Arrays.sort(people, (a1, a2) -> {
+            int val = Integer.compare(a2[0], a1[0]);
+            return val == 0 ? Integer.compare(a1[1], a2[1]) : val;
+        });
 
-            Stack<int[]> stack = new Stack<>();
-            stack.push(people[0]);
+        List<int[]> list = new ArrayList<>();
 
-            for (int i = 1; i < people.length; i++) {
-                int[] current = people[i];
-                if (current[0] < stack.peek()[0]) {
-                    stack.add(current[1], current);
-                } else {
-                    stack.add(current);
-                }
-            }
-
-            return stack.toArray(new int[0][]);
+        for (int[] person : people) {
+            list.add(person[1], person);
         }
 
-        return new int[0][];
+        return list.toArray(new int[0][]);
     }
 }
