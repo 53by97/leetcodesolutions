@@ -11,13 +11,8 @@ class CoinChange {
         dp[0] = 1;
 
         for (int coin : coins) {
-            if (coin > amount) {
-                continue;
-            }
-            for (int i = 1; i <= amount; i++) {
-                if (i >= coin) {
-                    dp[i] = dp[i] + dp[i - coin];
-                }
+            for (int i = coin; i <= amount; i++) {
+                dp[i] += dp[i - coin];
             }
         }
 
